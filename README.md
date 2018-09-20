@@ -598,7 +598,7 @@ int main()
 
 ## daha çok...
 
-Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/Jam3/math-as-code/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
+Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
 
 ## Katkı
 
