@@ -729,6 +729,120 @@ Ayrıca `∉` ve `∌` gibi "bir elemanı değildir" sembollerini de kullanabili
 <!-- A=\left \{3,9,14}{  \right \}, 6 \notin A -->
 
 
+## yaygın sayı kümeleri
+
+Denklemler arasında bazı büyük [yazı tahtası kalını](https://eksisozluk.com/blackboard-bold--5791356) yazıyüzlü harfler görebilirsiniz. Genellikle, bu kümeleri tanımlamak için kullanılır.
+
+Örneğin, *k*'yi, `ℝ` kümesinin bir elemanı olarak tanımlayabiliriz.
+
+![real](http://latex.codecogs.com/svg.latex?k%20%5Cin%20%5Cmathbb%7BR%7D)
+
+<!-- k \in \mathbb{R} -->
+
+Aşağıda birkaç yaygın küme ve onların sembolleri listelenmiştir.
+
+
+#### `ℝ` gerçel sayılar
+
+Büyük `ℝ`, gerçel sayı kümesini tanımlar. Bu sayı kümesi tamsayıları, rasyonel sayıları ve irrasyonel sayıları içerir.
+
+C++, kayan nokta sayıları ve tamsayıları aynı tür olarak ele alır, dolayısıyla aşağıdakiler bizim *k* ∈ ℝ örneğimizin basit bir testi olacaktır:
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+bool isReal (double k) {
+    return (!std::isnan(k) && std::isfinite(k));
+}
+
+int main()
+{
+    double n1 = sqrt(-2);
+
+    if (isReal(n1))
+        std::cout << n1 << " gercel sayi" << '\n';
+    else
+        std::cout << n1 << " gercel sayi degil" << '\n';
+
+    return 0;
+}
+```
+
+
+#### `ℚ` rasyonel sayılar
+Rasyonel sayılar, bir kesir veya *oran* (`⅗` gibi) olarak ifade edilebilen gerçel sayılardır. Rasyonel sayılar payda olarak sıfır alamaz.
+
+Bu aynı zamanda tüm tamsayıların rasyonel sayılar olduğu anlamına gelir, çünkü payda 1 olarak ifade edilebilir.
+
+Öte yandan irrasyonel bir sayı, π (PI) gibi, bir oran olarak ifade edilemeyen bir sayıdır.
+
+
+#### `ℤ` tam sayılar
+
+Tam sayı, kesirli kısmı olmayan gerçel bir sayıdır. Bunlar pozitif veya negatif olabilir.
+
+C++'ta basit bir test şöyle görünebilir:
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+bool isInteger (double n) {
+    return std::floor(n) == n;
+}
+
+int main()
+{
+
+    double n1 = 1.0;
+
+    if (isInteger(n1))
+        std::cout << n1 << " tam sayı" << '\n';
+    else
+        std::cout << n1 << " tam sayı degil" << '\n';
+
+    return 0;
+}
+```
+
+#### `ℕ` doğal sayılar
+
+Doğal bir sayı, pozitif olan ve negatif olmayan bir tam sayıdır. Bağlama ve çalışm alanına bağlı olarak, küme sıfırı içerebilir veya içermeyebilir, bu nedenle şunlardan birine benzeyebilir:
+
+```cpp
+{ 0, 1, 2, 3, ... }
+{ 1, 2, 3, 4, ... }
+```
+
+İlki bilgisayar bilimlerinde daha yaygındır, örneğin:
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+bool isNaturalNumber (double n) {
+  return (std::floor(n) == n && n >= 0);
+}
+
+int main()
+{
+    double n1 = 1.0;
+
+    if (isNaturalNumber(n1))
+        std::cout << n1 << " doğal sayı" << '\n';
+    else
+        std::cout << n1 << " doğal sayı degil" << '\n';
+
+    return 0;
+}
+```
+
+#### `ℂ` karmaşık sayılar
+
+Karmaşık bir sayı, 2B düzlemde bir koordinat olarak görülen gerçek ve sanal bir sayının birleşimidir. Daha çok bilgi için [A Visual, Intuitive Guide to Imaginary Numbers (Sanal Sayılar için Görsel, Sezgisel Bir Kılavuz)](http://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/)'a bakabilirsiniz.
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
