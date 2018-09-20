@@ -76,13 +76,17 @@ Tanımlama için `:=`, `=:` ve `=` sembollerinin kullanıldığını görebilirs
 
 C++'ta değişkenlerimizi tanımlamak ve takma adlar sağlamak için tür isimlerini kullanabiliriz:
 
+```cpp
 auto x = 2 * k * j;
+```
 
 Ancak, bu değişebilir ve sadece o anki değerlerin bir anlık görüntüsünü alır. Bazı diller, matematiksel bir tanımlamaya daha yakın olan ön işlemci #define ifadesine sahiptir.
 
 C++'ta daha doğru bir tanımlama şöyle olabilir:
 
+```cpp
 const auto x = 2 * k * j;
+```
 
 Öte yandan, aşağıdaki ifade eşitliği temsil eder:
 
@@ -92,7 +96,9 @@ const auto x = 2 * k * j;
 
 Bu denklem de C++'ta öncekiler gibi yorumlanabilir:
 
+```cpp
 const auto x = 2 * k * j;
+```
 
 
 ## karekök ve karmaşık sayılar
