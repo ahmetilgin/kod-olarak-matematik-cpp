@@ -1,455 +1,501 @@
-# math-as-code
+# kod-olarak-matematik-cpp
 
->[Chinese translation (中文版)](./README-zh.md)
+[Asıl proje: [math-as-code](https://github.com/Jam3/math-as-code)]
 
-This is a reference to ease developers into mathematical notation by showing comparisons with JavaScript code.
+Bu, geliştiricilere C++ kod karşılıklarını göstererek matematiksel notasyonu anlamalarını kolaylaştırmayı amaçlayan bir referanstır.
 
-Motivation: Academic papers can be intimidating for self-taught game and graphics programmers. :) 
+Motivasyon: Akademik makaleler, kendi kendini eğiten oyun ve grafik programcıları için korkutucu olabilir :)
 
-This guide is not yet finished. If you see errors or want to contribute, please [open a ticket](https://github.com/Jam3/math-as-code/issues) or send a PR.
-
-> **Note**: For brevity, some code examples make use of [npm packages](https://www.npmjs.com/). You can refer to their GitHub repos for implementation details.
+Bu kılavuz henüz tamamlanmadı. Hata görürseniz veya katkıda bulunmak isterseniz, lütfen bir kayıt açın veya bir değişiklik isteği gönderin.
 
 
+# önsöz
+Matematiksel semboller; yazara, bağlama ve çalışma alanına (lineer cebir, küme teorisi, vb.) bağlı olarak farklı şeyler ifade edebilir. Bu kılavuz, bir sembolün tüm kullanımlarını kapsamayabilir. Bazı durumlarda, gerçek dünyada referansları (blog yazıları, yayınlar, vb.) verilerek bir sembolün vahşi ortamda nasıl görünebileceğini gösterilmeye çalışılacaktır.
 
-# foreword
+Daha eksiksiz bir liste için Wikipedia'da [Matematiksel Sembollerin Listesi](https://en.wikipedia.org/wiki/List_of_mathematical_symbols)'ne bakınız.
 
-Mathematical symbols can mean different things depending on the author, context and the field of study (linear algebra, set theory, etc). This guide may not cover *all* uses of a symbol. In some cases, real-world references (blog posts, publications, etc) will be cited to demonstrate how a symbol might appear in the wild.
+Basitlik için, buradaki kod örneklerinin çoğu kayan nokta değerleri üzerinde çalışır ve sayısal olarak sağlam değildir. Bunun neden bir sorun olabileceğine dair daha çok ayrıntı için Mikola Lysenko'nun [Sağlam Aritmetik Notlarına](https://github.com/mikolalysenko/robust-arithmetic-notes) bakınız.
 
-For a more complete list, refer to [Wikipedia - List of Mathematical Symbols](https://en.wikipedia.org/wiki/List_of_mathematical_symbols). 
 
-For simplicity, many of the code examples here operate on floating point values and are not numerically robust. For more details on why this may be a problem, see [Robust Arithmetic Notes](https://github.com/mikolalysenko/robust-arithmetic-notes) by Mikola Lysenko.
+# içindekiler
 
-# contents
 
-- [variable name conventions](#variable-name-conventions)
-- [equals `=` `≈` `≠` `:=`](#equals-symbols)
-- [square root and complex numbers `√` *`i`*](#square-root-and-complex-numbers)
-- [dot & cross `·` `×` `∘`](#dot--cross)
-  - [scalar multiplication](#scalar-multiplication)
-  - [vector multiplication](#vector-multiplication)
-  - [dot product](#dot-product)
-  - [cross product](#cross-product)
-- [sigma `Σ`](#sigma) - *summation*
-- [capital Pi `Π`](#capital-pi) - *products of sequences*
-- [pipes `||`](#pipes)
-  - [absolute value](#absolute-value)
-  - [Euclidean norm](#euclidean-norm)
-  - [determinant](#determinant)
-- [hat **`â`**](#hat) - *unit vector*
-- ["element of" `∈` `∉`](#element)
-- [common number sets `ℝ` `ℤ` `ℚ` `ℕ`](#common-number-sets)
-- [function `ƒ`](#function)
-  - [piecewise function](#piecewise-function)
-  - [common functions](#common-functions)
-  - [function notation `↦` `→`](#function-notation)
-- [prime `′`](#prime)
-- [floor & ceiling `⌊` `⌉`](#floor--ceiling)
-- [arrows](#arrows)
-  - [material implication `⇒` `→`](#material-implication)
-  - [equality `<` `≥` `≫`](#equality)
-  - [conjunction & disjunction `∧` `∨`](#conjunction--disjunction)
-- [logical negation `¬` `~` `!`](#logical-negation)
-- [intervals](#intervals)
-- [more...](#more)
+## değişken isim kuralları
+Çalışmanın bağlamına ve alanına bağlı olarak çeşitli isimlendirme kuralları vardır ve bunlar her zaman tutarlı değildir. Bununla birlikte, literatürde, aşağıdaki gibi bir deseni takip eden değişken isimleri bulabilirsiniz:
 
-## variable name conventions
+- *s* - skaler için italik küçük harfler (ör. bir sayı)
+- **x** - vektörler için kalın küçük harfler (ör. bir 2B nokta)
+- **A** - matrisler için büyük harfli harfler (ör. bir 3B dönüşüm)
+- *θ* - sabitler ve özel değişkenler için italik küçük harfli Yunan harfleri (ör. [kutup açısı *θ*, *teta*](https://en.wikipedia.org/wiki/Spherical_coordinate_system))
 
-There are a variety of naming conventions depending on the context and field of study, and they are not always consistent. However, in some of the literature you may find variable names to follow a pattern like so:
+Bu ayrıca bu kılavuzun da biçimi olacaktır.
 
-- *s* - italic lowercase letters for scalars (e.g. a number)
-- **x** - bold lowercase letters for vectors (e.g. a 2D point)
-- **A** - bold uppercase letters for matrices (e.g. a 3D transformation)
-- *θ* - italic lowercase Greek letters for constants and special variables (e.g. [polar angle *θ*, *theta*](https://en.wikipedia.org/wiki/Spherical_coordinate_system))
 
-This will also be the format of this guide.
+## eşitlik sembolleri
 
-## equals symbols
+Eşittir işareti ='e benzeyen bir dizi sembol vardır. Aşağıda birkaç genel örnek görülebilir:
 
-There are a number of symbols resembling the equals sign `=`. Here are a few common examples:
+- `=` eşitlik için kullanılır (değerler aynıdır)
+- `≠` eşitsizlik için kullanılır (değer aynı değildir)
+- `≈` yaklaşık olarak eşittir ifadesi için kullanılır (`π ≈ 3.14159`)
+- `:=` tanımlama içindir (A, B olarak tanımlanmıştır)
 
-- `=` is for equality (values are the same)
-- `≠` is for inequality (value are not the same)
-- `≈` is for approximately equal to (`π ≈ 3.14159`)
-- `:=` is for definition (A is defined as B)
+C++'taysa:
 
-In JavaScript:
+```cpp
+#include <iostream>
+#include <cmath>
 
-```js
-// equality
-2 === 3
+bool yaklasikEsitMi(double a, double b, double epsilon) {
+  return fabs(a - b) <= epsilon;
+}
 
-// inequality
-2 !== 3
+int main()
+{
+    // eşitlik
+    if (2==3)
+        std::cout << "İki, üçe eşittir.\n";
+    // eşitsizlik
+    if (2!=3)
+        std::cout << "İki, üçe eşit değildir.\n";
+    // yaklaşık eşitlik
+    if (yaklasikEsitMi(M_PI, 3.14159265359, 1e-5))
+        std::cout << M_PI << ", yaklaşık olarak 3.14159265359 değerine eşittir.\n";
 
-// approximately equal
-almostEqual(Math.PI, 3.14159, 1e-5)
-
-function almostEqual(a, b, epsilon) {
-  return Math.abs(a - b) <= epsilon
+    return 0;
 }
 ```
 
-You might see the `:=`, `=:` and `=` symbols being used for *definition*.<sup>[1]</sup>
+Tanımlama için `:=`, `=:` ve `=` sembollerinin kullanıldığını görebilirsiniz.<sup>[1]</sup>
 
-For example, the following defines *x* to be another name for 2*kj*.
+Örneğin aşağıdaki tanımlama, x'i 2kj'nin farklı bir ismi olarak tanımlar:
 
-![equals1](http://latex.codecogs.com/svg.latex?x%20%3A%3D%202kj)
+![x := 2kj](http://latex.codecogs.com/svg.latex?x%20%3A%3D%202kj)
 
 <!-- x := 2kj -->
 
-In JavaScript, we might use `var` to *define* our variables and provide aliases:
+C++'ta değişkenlerimizi tanımlamak ve takma adlar sağlamak için tür isimlerini kullanabiliriz:
 
-```js
-var x = 2 * k * j
-```
+auto x = 2 * k * j;
 
-However, this is mutable, and only takes a snapshot of the values at that time. Some languages have pre-processor `#define` statements, which are closer to a mathematical *define*. 
+Ancak, bu değişebilir ve sadece o anki değerlerin bir anlık görüntüsünü alır. Bazı diller, matematiksel bir tanımlamaya daha yakın olan ön işlemci #define ifadesine sahiptir.
 
-A more accurate *define* in JavaScript (ES6) might look a bit like this:
+C++'ta daha doğru bir tanımlama şöyle olabilir:
 
-```js
-const f = (k, j) => 2 * k * j
-```
+const auto x = 2 * k * j;
 
-The following, on the other hand, represents equality:
+Öte yandan, aşağıdaki ifade eşitliği temsil eder:
 
-![equals2](http://latex.codecogs.com/svg.latex?x%20%3D%202kj)
+![x = 2kj](http://latex.codecogs.com/svg.latex?x%20%3D%202kj)
 
 <!-- x = 2kj -->
 
-The above equation might be interpreted in code as an [assertion](https://developer.mozilla.org/en-US/docs/Web/API/console/assert):
+Bu denklem de C++'ta öncekiler gibi yorumlanabilir:
 
-```js
-console.assert(x === (2 * k * j))
-```
+const auto x = 2 * k * j;
 
-## square root and complex numbers
 
-A square root operation is of the form:
+## karekök ve karmaşık sayılar
+
+Bir karekök işlemi şu şekildedir:
 
 ![squareroot](http://latex.codecogs.com/svg.latex?%5Cleft%28%5Csqrt%7Bx%7D%5Cright%29%5E2%20%3D%20x)
 
-<!-- \left(\sqrt{x}\right)^2 = x -->
+Programlamada, aşağıdaki gibi bir sqrt fonksiyonu kullanırız:
 
-In programming we use a `sqrt` function, like so: 
-
-```js
-var x = 9;
-console.log(Math.sqrt(x));
-//=> 3
+```cpp
+    int x = 9;
+    std::cout << sqrt(x);
+    // 3
 ```
 
-Complex numbers are expressions of the form ![complex](http://latex.codecogs.com/svg.latex?a&space;&plus;&space;ib), where ![a](http://latex.codecogs.com/svg.latex?a) is the real part and ![b](http://latex.codecogs.com/svg.latex?b) is the imaginary part. The imaginary number ![i](http://latex.codecogs.com/svg.latex?i) is defined as:
+Kompleks sayılar, ![complex](http://latex.codecogs.com/svg.latex?a&space;&plus;&space;ib) biçimindeki ifadelerdir, ![a](http://latex.codecogs.com/svg.latex?a) gerçek kısım ve ![b](http://latex.codecogs.com/svg.latex?b) de sanal kısımdır. Sanal sayı ![i](http://latex.codecogs.com/svg.latex?i) şöyle tanımlanır:
 
 ![imaginary](http://latex.codecogs.com/svg.latex?i%3D%5Csqrt%7B-1%7D).
 <!-- i=\sqrt{-1} -->
 
-In JavaScript, there is no built-in functionality for complex numbers, but there are some libraries that support complex number arithmetic. For example, using [mathjs](https://www.npmjs.com/package/mathjs):
+C++'ta, karmaşık sayılar için yerleşik fonksiyonlar vardır ve bunlarla karmaşık sayı aritmetiği işlemleri yapılabilir. Örneğin:
 
-```js
-var math = require('mathjs')
+```cpp
+#include <iostream>
+#include <complex>
 
-var a = math.complex(3, -1)
-//=> { re: 3, im: -1 }
+int main()
+{
+    //{ re: 3, im: -1 }
+    std::complex<double> a(3.0, -1.0);
+    //{ re: 0, im: 1 }
+    std::complex<double> b(0.0, 1.0);
+    std::complex<double> c = a * b;
 
-var b = math.sqrt(-1)
-//=> { re: 0, im: -1 }
+    //'1 + 3i'
+    std::cout << c << '\n';
 
-console.log(math.multiply(a, b).toString())
-//=> '1 + 3i'
+    std::cout << "Gerçek kısım: " << real(c) << '\n';
+    std::cout << "Sanal kısım: " << imag(c) << '\n';
+
+    return 0;
+}
+
 ```
 
-The library also supports evaluating a string expression, so the above could be re-written as:
+C++'ta karmaşık sayılarla ilgili birçok işlem daha kolayca yapılabilir, bunlar hakkında daha çok bilgi için GeeksforGeeks'teki [Complex numbers in C++](https://www.geeksforgeeks.org/complex-numbers-c-set-1/) yazısına bakabilirsiniz.
 
-```js
-console.log(math.eval('(3 - i) * i').toString())
-//=> '1 + 3i'
-```
 
-Other implementations:
+## nokta ve çarpı
 
-- [immutable-complex](https://www.npmjs.com/package/immutable-complex)
-- [complex-js](https://www.npmjs.com/package/complex-js)
-- [Numeric-js](http://www.numericjs.com/)
+Nokta `·` ve çarpım `×` sembolleri, içeriğe bağlı olarak farklı kullanımlara sahiptir.
 
-## dot & cross
+Ne oldukları belli görünebilir, ancak diğer bölümlere devam etmeden önce ince farkları anlamak önemlidir.
 
-The dot `·` and cross `×` symbols have different uses depending on context.
+#### skaler çarpım
 
-They might seem obvious, but it's important to understand the subtle differences before we continue into other sections.
-
-#### scalar multiplication
-
-Both symbols can represent simple multiplication of scalars. The following are equivalent:
+Her iki sembol de skalerlerin basit çarpımını temsil edebilir. Aşağıdakiler eşdeğerdir:
 
 ![dotcross1](http://latex.codecogs.com/svg.latex?5%20%5Ccdot%204%20%3D%205%20%5Ctimes%204)
 
 <!-- 5 \cdot 4 = 5 \times 4 -->
 
-In programming languages we tend to use asterisk for multiplication:
+Programlama dillerinde çarpma için yıldız işareti kullanma eğilimindeyizdir:
 
-```js
-var result = 5 * 4
+```cpp
+int sonuc = 5 * 4
 ```
 
-Often, the multiplication sign is only used to avoid ambiguity (e.g. between two numbers). Here, we can omit it entirely:
+Çoğunlukla, çarpım işareti sadece belirsizliği önlemek için kullanılır (ör. iki sayı arasında). Şurada tamamen atlayabiliriz örneğin:
 
 ![dotcross2](http://latex.codecogs.com/svg.latex?3kj)
 
 <!-- 3kj -->
 
-If these variables represent scalars, the code would be:
+Eğer bu değişkenler skalerleri temsil ediyorsa kod şöyle olur:
 
-```js
-var result = 3 * k * j
+```cpp
+int sonuc = 3 * k * j
 ```
 
-#### vector multiplication
+#### vektör çarpımı
 
-To denote multiplication of one vector with a scalar, or element-wise multiplication of a vector with another vector, we typically do not use the dot `·` or cross `×` symbols. These have different meanings in linear algebra, discussed shortly.
+Bir vektörün bir skaler ile çarpımını veya bir vektörün başka bir vektörle öğe öğe çarpımını göstermek için, genellikle nokta `·` veya çarpı `×` sembolleri kullanmayız. Bunlar, lineer cebirde farklı anlamlara sahiptir.
 
-Let's take our earlier example but apply it to vectors. For element-wise vector multiplication, you might see an open dot `∘` to represent the [Hadamard product](https://en.wikipedia.org/wiki/Hadamard_product_%28matrices%29).<sup>[2]</sup>
+Daha önceki örneğimizi alıp vektörlere uygulayalım. Öğe öğe vektör çarpımını temsil etmek için, Hadamard çarpımında bir açık nokta `∘` kullanıldığını görebilirsiniz.<sup>[2]</sup>
 
 ![dotcross3](http://latex.codecogs.com/svg.latex?3%5Cmathbf%7Bk%7D%5Ccirc%5Cmathbf%7Bj%7D)
 
 <!-- 3\mathbf{k}\circ\mathbf{j} -->
 
-In other instances, the author might explicitly define a different notation, such as a circled dot `⊙` or a filled circle `●`.<sup>[3]</sup>
+Diğer durumlarda yazar, daire içine alınmış bir nokta `⊙` veya dolu bir daire `●` gibi farklı bir gösterimi açıkça tanımlayabilir.<sup>[3]</sup>
 
-Here is how it would look in code, using arrays `[x, y]` to represent the 2D vectors.
+2B vektörleri temsil etmek için kodda dizilerin [x, y] nasıl kullanılacağını aşağıda görebilirsiniz:
 
-```js
-var s = 3
-var k = [ 1, 2 ]
-var j = [ 2, 3 ]
+```cpp
+#include <iostream>
+#include <array>
 
-var tmp = multiply(k, j)
-var result = multiplyScalar(tmp, s)
-//=> [ 6, 18 ]
-```
-
-Our `multiply` and `multiplyScalar` functions look like this:
-
-```js
-function multiply(a, b) {
-  return [ a[0] * b[0], a[1] * b[1] ]
+std::array<int, 2> carp(std::array<int, 2> a, std::array<int, 2> b)
+{
+    std::array<int, 2> tmp;
+    for(int i = 0; i < a.size(); i++)
+        tmp[i] = a[i] * b[i];
+    return tmp;
 }
 
-function multiplyScalar(a, scalar) {
-  return [ a[0] * scalar, a[1] * scalar ]
+std::array<int, 2> skalerCarp(std::array<int, 2> a, int b)
+{
+    std::array<int, 2> tmp;
+    for(int i = 0; i < a.size(); i++)
+        tmp[i] = a[i] * b;
+    return tmp;
+}
+
+
+int main()
+{
+    int s = 3;
+    std::array<int, 2> k = {1, 2};
+    std::array<int, 2> j = {2, 3};
+
+    std::array<int, 2> tmp = carp(k, j);
+    std::array<int, 2> sonuc = skalerCarp(tmp, s);
+
+    for(const auto& s: sonuc)
+        std::cout << s << ' ';
+        // [ 6, 18 ]
+
+    return 0;
 }
 ```
 
-Similarly, matrix multiplication typically does not use the dot `·` or cross symbol `×`. Matrix multiplication will be covered in a later section.
+Benzer şekilde, matris çarpımı da genellikle nokta `·` veya çarpı sembolü `×` kullanmaz. Matris çarpımı daha sonraki bölümlerde ele alınacaktır.
 
-#### dot product
 
-The dot symbol `·` can be used to denote the [*dot product*](https://en.wikipedia.org/wiki/Dot_product) of two vectors. Sometimes this is called the *scalar product* since it evaluates to a scalar.
+#### nokta çarpım
+
+Nokta sembolü `·` iki vektörün [nokta çarpımını](https://www.wikiwand.com/tr/Nokta_%C3%A7arp%C4%B1m) göstermek için kullanılabilir. Skaler olarak değerlendirildiğinden bazen bu skaler çarpım olarak adlandırılır.
 
 ![dotcross4](http://latex.codecogs.com/svg.latex?%5Cmathbf%7Bk%7D%5Ccdot%20%5Cmathbf%7Bj%7D)
 
 <!-- \mathbf{k}\cdot \mathbf{j} -->
 
-It is a very common feature of linear algebra, and with a 3D vector it might look like this:
+Lineer cebirin çok yaygın bir özelliğidir ve üç boyutlu bir vektör için aşağıdaki gibi görünebilir:
 
-```js
-var k = [ 0, 1, 0 ]
-var j = [ 1, 0, 0 ]
+```cpp
+#include <iostream>
+#include <array>
+#include <numeric>
 
-var d = dot(k, j)
-//=> 0
-```
+int main()
+{
 
-The result `0` tells us our vectors are perpendicular. Here is a `dot` function for 3-component vectors:
+    std::array<int, 3> k = { 3, -2, 5 };
+    std::array<int, 3> j = { -1, -4, 2 };
 
-```js
-function dot(a, b) {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+    std::cout << std::inner_product(std::begin(k), std::end(k), std::begin(j), 0.0);
+    //=> 15
+
+    return 0;
 }
 ```
 
-#### cross product
+#### çapraz çarpım
 
-The cross symbol `×` can be used to denote the [*cross product*](https://en.wikipedia.org/wiki/Cross_product) of two vectors.
+Çarpma sembolü `×`, iki vektörün [çapraz çarpımını](https://www.wikiwand.com/tr/%C3%87apraz_%C3%A7arp%C4%B1m) belirtmek için kullanılabilir.
 
 ![dotcross5](http://latex.codecogs.com/svg.latex?%5Cmathbf%7Bk%7D%5Ctimes%20%5Cmathbf%7Bj%7D)
 
 <!-- \mathbf{k}\times \mathbf{j} -->
 
-In code, it would look like this:
+Bu, kodda şöyle görünecektir:
 
-```js
-var k = [ 0, 1, 0 ]
-var j = [ 1, 0, 0 ]
+```cpp
+#include <iostream>
+#include <vector>
 
-var result = cross(k, j)
-//=> [ 0, 0, -1 ]
-```
+template <typename T, typename U>
+std::vector<T> crossProduct(std::vector<T> const &a, std::vector<U> const &b)
+{
+  std::vector<T> r (a.size());
+  r[0] = a[1] * b[2] - a[2] * b[1];
+  r[1] = a[2] * b[0] - a[0] * b[2];
+  r[2] = a[0] * b[1] - a[1] * b[0];
+  return r;
+}
 
-Here, we get `[ 0, 0, -1 ]`, which is perpendicular to both **k** and **j**.
+int main()
+{
 
-Our `cross` function:
+    std::vector<int> k = { 0, 1, 0 };
+    std::vector<int> j = { 1, 0, 0 };
 
-```js
-function cross(a, b) {
-  var ax = a[0], ay = a[1], az = a[2],
-    bx = b[0], by = b[1], bz = b[2]
+    std::vector<int> sonuc = crossProduct(k, j);
 
-  var rx = ay * bz - az * by
-  var ry = az * bx - ax * bz
-  var rz = ax * by - ay * bx
-  return [ rx, ry, rz ]
+    for(const auto& s: sonuc)
+        std::cout << s << ' ';
+        //=> [ 0, 0, -1 ]
+
+    return 0;
 }
 ```
 
-For other implementations of vector multiplication, cross product, and dot product:
+Burada, [0, 0, -1] elde ederiz, bu da hem k'nin hem de j'nin dik olduğu anlamına gelir.
 
-- [gl-vec3](https://github.com/stackgl/gl-vec3)
-- [gl-vec2](https://github.com/stackgl/gl-vec2)
-- [vectors](https://github.com/hughsk/vectors) - includes n-dimensional
 
-## sigma 
+## toplam sembolü
 
-The big Greek `Σ` (Sigma) is for [Summation](https://en.wikipedia.org/wiki/Summation). In other words: summing up some numbers.
+Büyük Yunanca `Σ` ([Sigma](https://www.wikiwand.com/tr/Toplam_sembol%C3%BC)), toplama içindir. Başka bir deyişle, bazı sayıları toplar.
 
 ![sigma](http://latex.codecogs.com/svg.latex?%5Csum_%7Bi%3D1%7D%5E%7B100%7Di)
 
 <!-- \sum_{i=1}^{100}i -->
 
-Here, `i=1` says to start at `1` and end at the number above the Sigma, `100`. These are the lower and upper bounds, respectively. The *i* to the right of the "E" tells us what we are summing. In code:
+Burada `i=1`, 1'den başlanıp toplama sembolünün üstündeki sayı olan 100'de sonlanacağı söylenmektedir. Bunlar sırasıyla alt ve üst sınırlardır. `Σ`'nın sağındaki *i*, bize ne topladığımızı gösterir. Kodda:
 
-```js
-var sum = 0
-for (var i = 1; i <= 100; i++) {
-  sum += i
-}
+```cpp
+    int toplam = 0;
+    for (int i = 1; i <= 100; i++) {
+        toplam += i;
+    }
+    std::cout << toplam << '\n';
 ```
 
-The result of `sum` is `5050`.
+Toplamın sonucunu tutan `toplam`'ın değeri 5050 olur.
 
-**Tip:** With whole numbers, this particular pattern can be optimized to the following:
+**İpucu:** Tam sayılarla, bu model aşağıdaki şekilde optimize edilebilir:
 
-```js
-var n = 100 // upper bound
-var sum = (n * (n + 1)) / 2
+```cpp
+    int n = 100; // üst sınır
+    int toplam = (n * (n + 1)) / 2;
+
+    std::cout << toplam << '\n';
 ```
 
-Here is another example where the *i*, or the "what to sum," is different:
+İşte, *i*'nin veya "toplanacak şeyin" farklı olduğu başka bir örnek:
 
 ![sum2](http://latex.codecogs.com/svg.latex?%5Csum_%7Bi%3D1%7D%5E%7B100%7D%282i&plus;1%29)
 
 <!-- \sum_{i=1}^{100}(2i+1) -->
 
-In code:
+Kodda:
 
-```js
-var sum = 0
-for (var i = 1; i <= 100; i++) {
-  sum += (2 * i + 1)
-}
+```cpp
+    int toplam = 0;
+    for (int i = 1; i <= 100; i++) {
+        toplam += (2 * i + 1);
+    }
+    std::cout << toplam << '\n';
 ```
 
-The result of `sum` is `10200`.
+Toplamın sonucu 10200'dür.
 
-The notation can be nested, which is much like nesting a `for` loop. You should evaluate the right-most sigma first, unless the author has enclosed them in parentheses to alter the order. However, in the following case, since we are dealing with finite sums, the order does not matter.
+Notasyon, bir for döngüsünün iç içe olduğuna benzer şekilde iç içe olabilir. Yazar, sırayı değiştirmek için parantez içine almadığı sürece, en sağdaki toplama sembolünü ilk önce değerlendirmelisiniz. Ancak, aşağıdaki durumda, sınırlı miktarlarla uğraştığımız için, sıranın önemi yoktur:
 
 ![sigma3](http://latex.codecogs.com/svg.latex?%5Csum_%7Bi%3D1%7D%5E%7B2%7D%5Csum_%7Bj%3D4%7D%5E%7B6%7D%283ij%29)
 
 <!-- \sum_{i=1}^{2}\sum_{j=4}^{6}(3ij) -->
 
-In code:
+Kodda:
 
-```js
-var sum = 0
-for (var i = 1; i <= 2; i++) {
-  for (var j = 4; j <= 6; j++) {
-    sum += (3 * i * j)
-  }
-}
+```cpp
+    int toplam = 0;
+    for (int i = 1; i <= 2; i++) {
+        for (int j = 4; j <= 6; j++) {
+            toplam += (3 * i * j);
+        }
+    }
+
+    std::cout << toplam << '\n';
 ```
 
-Here, `sum` will be `135`.
+veya
 
-## capital Pi
+```cpp
+    int toplam = 0;
+    for (int j = 4; j <= 6; j++) {
+        for (int i = 1; i <= 2; i++) {
+            toplam += (3 * i * j);
+        }
+    }
 
-The capital Pi or "Big Pi" is very similar to [Sigma](#sigma), except we are using multiplication to find the product of a sequence of values. 
+    std::cout << toplam << '\n';
+```
 
-Take the following:
+Burada her iki kod parçası için de `toplam` 135 olacaktır.
+
+
+## büyük Pi
+
+[Büyük Pi](https://www.wikiwand.com/en/Multiplication#/Capital_Pi_notation), toplama sembolüne çok benzer, tek farkı bir dizi değerin toplamını değil çarpımını bulmak için kullanılır.
+
+Şuna bakalım:
 
 ![capitalPi](http://latex.codecogs.com/svg.latex?%5Cprod_%7Bi%3D1%7D%5E%7B6%7Di)
 
 <!-- \prod_{i=1}^{6}i -->
 
-In code, it might look like this:
+Bu, kodda şöyle görünebilir:
 
-```js
-var value = 1
-for (var i = 1; i <= 6; i++) {
-  value *= i
-}
+```cpp
+    int sonuc = 1;
+    for (int i = 1; i <= 6; i++) {
+      sonuc *= i;
+    }
+
+    std::cout << sonuc << '\n';
 ```
 
-Where `value` will evaluate to `720`.
+`sonuc`, 720 olarak hesaplanacaktır.
 
-## pipes
 
-Pipe symbols, known as *bars*, can mean different things depending on the context. Below are three common uses: [absolute value](#absolute-value), [Euclidean norm](#euclidean-norm), and [determinant](#determinant).
+## borular
 
-These three features all describe the *length* of an object.
+Çubuk olarak da bilinen boru sembolleri, içeriğe bağlı olarak farklı şeyler ifade edebilir. Aşağıda üç yaygın kullanım bulunmaktadır: [mutlak değer](https://www.wikiwand.com/tr/Mutlak_de%C4%9Fer), [Öklid normu](https://www.wikiwand.com/en/Norm_(mathematics)#/Euclidean_norm) ve [determinant](https://www.wikiwand.com/tr/Determinant).
 
-#### absolute value 
+Bu üç özelliğin tümü, bir nesnenin uzunluğunu tanımlar.
+
+
+#### mutlak değer
 
 ![pipes1](http://latex.codecogs.com/svg.latex?%5Cleft%20%7C%20x%20%5Cright%20%7C)
 
 <!-- \left | x \right | -->
 
-For a number *x*, `|x|` means the absolute value of *x*. In code:
+*x* sayısı için `|x|`, x'in mutlak değerini belirtir. Kodda:
 
-```js
-var x = -5
-var result = Math.abs(x)
-// => 5
+```cpp
+#include <iostream>
+#include <cmath>
+
+int main()
+{
+    int x = -5;
+    int sonuc = abs(x);
+    std::cout << sonuc << '\n';
+    // => 5
+
+    return 0;
+}
 ```
 
-#### Euclidean norm
+
+#### Öklid normu
 
 ![pipes4](http://latex.codecogs.com/svg.latex?%5Cleft%20%5C%7C%20%5Cmathbf%7Bv%7D%20%5Cright%20%5C%7C)
 
 <!-- \left \| \mathbf{v} \right \| -->
 
-For a vector **v**, `‖v‖` is the [Euclidean norm](https://en.wikipedia.org/wiki/Norm_%28mathematics%29#Euclidean_norm) of **v**. It is also referred to as the "magnitude" or "length" of a vector.
+**v** vektörü için `‖v‖`, v'nin Öklid normudır. Bu, ayrıca bir vektörün "büyüklüğü" veya "uzunluğu" olarak da adlandırılır.
 
-Often this is represented by double-bars to avoid ambiguity with the *absolute value* notation, but sometimes you may see it with single bars:
+Çoğunlukla *mutlak değer* gösterimiyle karıştırılmasını önlemek için çift çubukla gösterilir, ancak bazen tek çubukla da gösteriliyor olabilir:
 
 ![pipes2](http://latex.codecogs.com/svg.latex?%5Cleft%20%7C%20%5Cmathbf%7Bv%7D%20%5Cright%20%7C)
 
 <!-- \left | \mathbf{v} \right | -->
 
-Here is an example using an array `[x, y, z]` to represent a 3D vector.
+İşte bir 3B vektörü temsil etmek için [x, y, z] şeklindeki bir dizinin kullanılışına örnek:
 
-```js
-var v = [ 0, 4, -3 ]
-length(v)
-//=> 5
-```
+```cpp
+#include <iostream>
+#include <cmath>
+#include <vector>
 
-The `length` function:
+int uzunluk (std::vector<int> vektor) {
+  int x = vektor[0];
+  int y = vektor[1];
+  int z = vektor[2];
+  return sqrt(x * x + y * y + z * z);
+}
 
-```js
-function length (vec) {
-  var x = vec[0]
-  var y = vec[1]
-  var z = vec[2]
-  return Math.sqrt(x * x + y * y + z * z)
+int main()
+{
+    std::vector<int> v = { 0, 4, -3 };
+    std::cout << uzunluk(v) << '\n';
+    //=> 5
+
+    return 0;
 }
 ```
 
-Other implementations:
+Bu işlemi yapmak için C++'ta birden çok yol vardır, bazılarını This Thread'deki [Euclidean norm](http://thisthread.blogspot.com/2012/03/euclidean-norm.html) yazısında görebilirsiniz, buradan alınan bir gerçekleştirim aşağıdadır:
 
-- [magnitude](https://github.com/mattdesl/magnitude/blob/864ff5a7eb763d34bf154ac5f5332d7601192b70/index.js) - n-dimensional
-- [gl-vec2/length](https://github.com/stackgl/gl-vec2/blob/21f460a371540258521fd2f720d80f14e87bd400/length.js) - 2D vector
-- [gl-vec3/length](https://github.com/stackgl/gl-vec3/blob/507480fa57ba7c5fb70679cf531175a52c48cf53/length.js) - 3D vector
+```cpp
+#include <iostream>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
+int main()
+{
+    boost::numeric::ublas::vector<int> uv(3);
+    uv[0] = 0;
+    uv[1] = 4;
+    uv[2] = -3;
+
+    std::cout << "Öklid normu: " << boost::numeric::ublas::norm_2(uv) << std::endl;
+
+    return 0;
+}
+```
+
 
 #### determinant
 
@@ -457,605 +503,92 @@ Other implementations:
 
 <!-- \left |\mathbf{A}  \right | -->
 
-For a matrix **A**, `|A|` means the [determinant](https://en.wikipedia.org/wiki/Determinant) of matrix **A**.
+Bir **A** matrisi için `|A|`, **A** matrisinin determinantı demektir.
 
-Here is an example computing the determinant of a 2x2 matrix, represented by a flat array in column-major format.
+Aşağıda, bir 2x2 matrisin determinantını hesaplayan örnek verilmiştir:
 
-```js
-var determinant = require('gl-mat2/determinant')
+```cpp
+#include <iostream>
+#include <armadillo>
 
-var matrix = [ 1, 0, 0, 1 ]
-var det = determinant(matrix)
-//=> 1
-```
+int main()
+{
+    arma::mat A = "1 0; 0 1;";
+    std::cout << arma::det(A) << '\n';
 
-Implementations:
-
-- [gl-mat4/determinant](https://github.com/stackgl/gl-mat4/blob/c2e2de728fe7eba592f74cd02266100cc21ec89a/determinant.js) - also see [gl-mat3](https://github.com/stackgl/gl-mat3) and [gl-mat2](https://github.com/stackgl/gl-mat2)
-- [ndarray-determinant](https://www.npmjs.com/package/ndarray-determinant)
-- [glsl-determinant](https://www.npmjs.com/package/glsl-determinant)
-- [robust-determinant](https://www.npmjs.com/package/robust-determinant)
-- [robust-determinant-2](https://www.npmjs.com/package/robust-determinant-2) and [robust-determinant-3](https://www.npmjs.com/package/robust-determinant-3), specifically for 2x2 and 3x3 matrices, respectively
-
-## hat
-
-In geometry, the "hat" symbol above a character is used to represent a [unit vector](https://en.wikipedia.org/wiki/Unit_vector). For example, here is the unit vector of **a**:
-
-![hat](http://latex.codecogs.com/svg.latex?%5Chat%7B%5Cmathbf%7Ba%7D%7D)
-
-<!-- \hat{\mathbf{a}} -->
-
-In Cartesian space, a unit vector is typically length 1. That means each part of the vector will be in the range of -1.0 to 1.0. Here we *normalize* a 3D vector into a unit vector:
-
-```js
-var a = [ 0, 4, -3 ]
-normalize(a)
-//=> [ 0, 0.8, -0.6 ]
-```
-
-Here is the `normalize` function, operating on 3D vectors:
-
-```js
-function normalize(vec) {
-  var x = vec[0]
-  var y = vec[1]
-  var z = vec[2]
-  var squaredLength = x * x + y * y + z * z
-
-  if (squaredLength > 0) {
-    var length = Math.sqrt(squaredLength)
-    vec[0] = x / length
-    vec[1] = y / length
-    vec[2] = z / length
-  }
-  return vec
+    return 0;
 }
 ```
 
-Other implementations:
+Yukarıdaki gerçekleştirimde lineer cebir ve bilimsel bilgi işlem kütüphanesi olan [Armadillo](http://arma.sourceforge.net) kullanılmıştır, derleyebilmeniz için başlık dosyasını programınıza dahil etmeli ve örneğin CMake kullanıyorsanız kütüphaneyi `target_link_libraries(${PROJECT_NAME} -larmadillo)` ile programınıza bağlamalısınız.
 
-- [gl-vec3/normalize](https://github.com/stackgl/gl-vec3/blob/507480fa57ba7c5fb70679cf531175a52c48cf53/normalize.js) and [gl-vec2/normalize](https://github.com/stackgl/gl-vec2/blob/21f460a371540258521fd2f720d80f14e87bd400/normalize.js)
-- [vectors/normalize-nd](https://github.com/hughsk/vectors/blob/master/normalize-nd.js) (n-dimensional)
+Eğer bir kütüphane kullanmak yerine determinant alan fonksiyonu kendiniz yazmak isterseniz GeeksforGeeks'teki [Determinant of a Matrix](https://www.geeksforgeeks.org/determinant-of-a-matrix/), Stack Overflow'daki [Fastest way to calculate determinant?](https://stackoverflow.com/questions/36254193/fastest-way-to-calculate-determinant) ve Code Review'daki [Determinant of a matrix](https://codereview.stackexchange.com/questions/79330/determinant-of-a-matrix) yazılarına bakabilirsiniz. Bunlardan sonuncusundan alınmış gerçekleştirim aşağıdadır:
 
-## element
+```cpp
+#include <iostream>
+#include <vector>
 
-In set theory, the "element of" symbol `∈` and `∋` can be used to describe whether something is an element of a *set*. For example:
+static int CalcDeterminant(std::vector<std::vector<int>> Matrix)
+   {
+        // Bu fonksiyon matrisin determinantını hesaplar
+        // herhangi bir boyuttaki matrisin determinantını özyinelemeli olarak hesaplayabilir
+        int det = 0; // determinant değeri burada saklanır
+        if (Matrix.size() == 1)
+        {
+            return Matrix[0][0]; // hesaplama gerekmez
+        }
+        else if (Matrix.size() == 2)
+        {
+            // Bu durumda, 2 boyutlu matrisin determinantını bir öntanımlı prosedürde hesaplıyoruz
+            det = (Matrix[0][0] * Matrix[1][1] - Matrix[0][1] * Matrix[1][0]);
+            return det;
+        }
+        else
+        {
+            // Bu durumda, 2'den büyük, örneğin 3x3 boyutlarına sahip bir kare matrisin
+            // determinantını hesaplıyoruz
+            for (int p = 0; p < Matrix[0].size(); p++)
+            {
+                //this loop iterate on each elements of the first row in the matrix.
+                //at each element we cancel the row and column it exist in
+                //and form a matrix from the rest of the elements in the matrix
+                std::vector<std::vector<int>> TempMatrix; // to hold the shaped matrix;
+                for (int i = 1; i < Matrix.size(); i++)
+                {
+                    // iteration will start from row one cancelling the first row values
+                    std::vector<int> TempRow;
+                    for (int j = 0; j < Matrix[i].size(); j++)
+                    {
+                        // iteration will pass all cells of the i row excluding the j
+                        //value that match p column
+                        if (j != p)
+                        {
+                           TempRow.push_back(Matrix[i][j]);//add current cell to TempRow
+                        }
+                    }
+                    if (TempRow.size() > 0)
+                        TempMatrix.push_back(TempRow);
+                    //after adding each row of the new matrix to the vector tempx
+                    //we add it to the vector temp which is the vector where the new
+                    //matrix will be formed
+                }
+                det = det + Matrix[0][p] * pow(-1, p) * CalcDeterminant(TempMatrix);
+                //then we calculate the value of determinant by using a recursive way
+                //where we re-call the function by passing to it the new formed matrix
+                //we keep doing this until we get our determinant
+            }
+            return det;
+        }
+    };
 
-![element1](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%203%20%5Cin%20A)
+int main()
+{
+    std::cout << CalcDeterminant({{1, 0}, {0, 1}}) << '\n';
 
-<!-- A=\left \{3,9,14}{  \right \}, 3 \in A -->
-
-Here we have a set of numbers *A* `{ 3, 9, 14 }` and we are saying `3` is an "element of" that set. 
-
-A simple implementation in ES5 might look like this:
-
-```js
-var A = [ 3, 9, 14 ]
-
-A.indexOf(3) >= 0
-//=> true
-```
-
-However, it would be more accurate to use a `Set` which only holds unique values. This is a feature of ES6.
-
-```js
-var A = new Set([ 3, 9, 14 ])
-
-A.has(3)
-//=> true
-```
-
-The backwards `∋` is the same, but the order changes:
-
-![element2](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%20A%20%5Cni%203)
-
-<!-- A=\left \{3,9,14}{  \right \}, A \ni 3 -->
-
-You can also use the "not an element of" symbols `∉` and `∌` like so:
-
-![element3](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%206%20%5Cnotin%20A)
-
-<!-- A=\left \{3,9,14}{  \right \}, 6 \notin A -->
-
-## common number sets
-
-You may see some some large [Blackboard](https://en.wikipedia.org/wiki/Blackboard_bold) letters among equations. Often, these are used to describe sets.
-
-For example, we might describe *k* to be an [element of](#element) the set `ℝ`. 
-
-![real](http://latex.codecogs.com/svg.latex?k%20%5Cin%20%5Cmathbb%7BR%7D)
-
-<!-- k \in \mathbb{R} -->
-
-Listed below are a few common sets and their symbols.
-
-#### `ℝ` real numbers
-
-The large `ℝ` describes the set of *real numbers*. These include integers, as well as rational and irrational numbers.
-
-JavaScript treats floats and integers as the same type, so the following would be a simple test of our *k* ∈ ℝ example:
-
-```js
-function isReal (k) {
-  return typeof k === 'number' && isFinite(k);
+    return 0;
 }
 ```
 
-*Note:* Real numbers are also *finite*, as in, *not infinite.*
-
-#### `ℚ` rational numbers
-
-Rational numbers are real numbers that can be expressed as a fraction, or *ratio* (like `⅗`). Rational numbers cannot have zero as a denominator.
-
-This also means that all integers are rational numbers, since the denominator can be expressed as 1.
-
-An irrational number, on the other hand, is one that cannot be expressed as a ratio, like π (PI). 
-
-#### `ℤ` integers
-
-An integer, i.e. a real number that has no fractional part. These can be positive or negative.
-
-A simple test in JavaScript might look like this:
-
-```js
-function isInteger (n) {
-  return typeof n === 'number' && n % 1 === 0
-}
-```
-
-#### `ℕ` natural numbers
-
-A natural number, a positive and non-negative integer. Depending on the context and field of study, the set may or may not include zero, so it could look like either of these:
-
-```js
-{ 0, 1, 2, 3, ... }
-{ 1, 2, 3, 4, ... }
-```
-
-The former is more common in computer science, for example:
-
-```js
-function isNaturalNumber (n) {
-  return isInteger(n) && n >= 0
-}
-```
-
-#### `ℂ` complex numbers
-
-A complex number is a combination of a real and imaginary number, viewed as a co-ordinate in the 2D plane. For more info, see [A Visual, Intuitive Guide to Imaginary Numbers](http://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/).
-
-## function
-
-[Functions](https://en.wikipedia.org/wiki/Function_%28mathematics%29) are fundamental features of mathematics, and the concept is fairly easy to translate into code.
-
-A function relates an input to an output value. For example, the following is a function:
-
-![function1](http://latex.codecogs.com/svg.latex?x%5E%7B2%7D)
-
-<!-- x^{2} -->
-
-We can give this function a *name*. Commonly, we use `ƒ` to describe a function, but it could be named `A(x)` or anything else.
-
-![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
-
-<!-- f\left (x  \right ) = x^{2} -->
-
-In code, we might name it `square` and write it like this:
-
-```js
-function square (x) {
-  return Math.pow(x, 2)
-}
-```
-
-Sometimes a function is not named, and instead the output is written.
-
-![function3](http://latex.codecogs.com/svg.latex?y%20%3D%20x%5E%7B2%7D)
-
-<!-- y = x^{2} -->
-
-In the above example, *x* is the input, the relationship is *squaring*, and *y* is the output.
-
-Functions can also have multiple parameters, like in a programming language. These are known as *arguments* in mathematics, and the number of arguments a function takes is known as the *arity* of the function.
-
-![function4](http://latex.codecogs.com/svg.latex?f%28x%2Cy%29%20%3D%20%5Csqrt%7Bx%5E2%20&plus;%20y%5E2%7D)
-
-<!-- f(x,y) = \sqrt{x^2 + y^2} -->
-
-In code:
-
-```js
-function length (x, y) {
-  return Math.sqrt(x * x + y * y)
-}
-```
-
-### piecewise function
-
-Some functions will use different relationships depending on the input value, *x*.
-
-The following function *ƒ* chooses between two "sub functions" depending on the input value.
-
-![piecewise1](http://latex.codecogs.com/svg.latex?f%28x%29%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7Bx%5E2-x%7D%7Bx%7D%2C%26%20%5Ctext%7Bif%20%7D%20x%5Cgeq%201%5C%5C%200%2C%20%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D)
-
-<!--    f(x)= 
-\begin{cases}
-    \frac{x^2-x}{x},& \text{if } x\geq 1\\
-    0, & \text{otherwise}
-\end{cases} -->
-
-This is very similar to `if` / `else` in code. The right-side conditions are often written as **"for x < 0"** or **"if x = 0"**. If the condition is true, the function to the left is used.
-
-In piecewise functions, **"otherwise"** and **"elsewhere"** are analogous to the `else` statement in code.
-
-```js
-function f (x) {
-  if (x >= 1) {
-    return (Math.pow(x, 2) - x) / x
-  } else {
-    return 0
-  }
-}
-```
-
-### common functions
-
-There are some function names that are ubiquitous in mathematics. For a programmer, these might be analogous to functions "built-in" to the language (like `parseInt` in JavaScript).
-
-One such example is the *sgn* function. This is the *signum* or *sign* function. Let's use [piecewise function](#piecewise-function) notation to describe it:
-
-![sgn](http://latex.codecogs.com/svg.latex?sgn%28x%29%20%3A%3D%20%5Cbegin%7Bcases%7D%20-1%26%20%5Ctext%7Bif%20%7D%20x%20%3C%200%5C%5C%200%2C%20%26%20%5Ctext%7Bif%20%7D%20%7Bx%20%3D%200%7D%5C%5C%201%2C%20%26%20%5Ctext%7Bif%20%7D%20x%20%3E%200%5C%5C%20%5Cend%7Bcases%7D)
-
-<!-- sgn(x) := 
-\begin{cases}
-    -1& \text{if } x < 0\\
-    0, & \text{if } {x = 0}\\
-    1, & \text{if } x > 0\\
-\end{cases} -->
-
-In code, it might look like this:
-
-```js
-function sgn (x) {
-  if (x < 0) return -1
-  if (x > 0) return 1
-  return 0
-}
-```
-
-See [signum](https://github.com/scijs/signum) for this function as a module.
-
-Other examples of such functions: *sin*, *cos*, *tan*.
-
-### function notation
-
-In some literature, functions may be defined with more explicit notation. For example, let's go back to the `square` function we mentioned earlier:
-
-![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
-
-<!-- f\left (x  \right ) = x^{2} -->
-
-It might also be written in the following form:
-
-![mapsto](http://latex.codecogs.com/svg.latex?f%20%3A%20x%20%5Cmapsto%20x%5E2)
-
-<!-- f : x \mapsto x^2 -->
-
-The arrow here with a tail typically means "maps to," as in *x maps to x<sup>2</sup>*. 
-
-Sometimes, when it isn't obvious, the notation will also describe the *domain* and *codomain* of the function. A more formal definition of *ƒ* might be written as:
-
-![funcnot](http://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20f%20%3A%26%5Cmathbb%7BR%7D%20%5Crightarrow%20%5Cmathbb%7BR%7D%5C%5C%20%26x%20%5Cmapsto%20x%5E2%20%5Cend%7Balign*%7D)
-
-<!-- \begin{align*}
-f :&\mathbb{R} \rightarrow \mathbb{R}\\
-&x \mapsto x^2 
-\end{align*}
- -->
-
-A function's *domain* and *codomain* is a bit like its *input* and *output* types, respectively. Here's another example, using our earlier *sgn* function, which outputs an integer:
-
-![domain2](http://latex.codecogs.com/svg.latex?sgn%20%3A%20%5Cmathbb%7BR%7D%20%5Crightarrow%20%5Cmathbb%7BZ%7D)
-
-<!-- sgn : \mathbb{R} \rightarrow \mathbb{Z} -->
-
-The arrow here (without a tail) is used to map one *set* to another.
-
-In JavaScript and other dynamically typed languages, you might use documentation and/or runtime checks to explain and validate a function's input/output. Example:
-
-```js
-/**
- * Squares a number.
- * @param  {Number} a real number
- * @return {Number} a real number
- */
-function square (a) {
-  if (typeof a !== 'number') {
-    throw new TypeError('expected a number')
-  }
-  return Math.pow(a, 2)
-}
-```
-
-Some tools like [flowtype](http://flowtype.org/) attempt to bring static typing into JavaScript.
-
-Other languages, like Java, allow for true method overloading based on the static types of a function's input/output. This is closer to mathematics: two functions are not the same if they use a different *domain*.
-
-## prime
-
-The prime symbol (`′`) is often used in variable names to describe things which are similar, without giving it a different name altogether. It can describe the "next value" after some transformation.
-
-For example, if we take a 2D point *(x, y)* and rotate it, you might name the result *(x′, y′)*. Or, the *transpose* of matrix **M** might be named **M′**.
-
-In code, we typically just assign the variable a more descriptive name, like `transformedPosition`.
-
-For a mathematical [function](#function), the prime symbol often describes the *derivative* of that function. Derivatives will be explained in a future section. Let's take our earlier function:
-
-![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
-
-<!-- f\left (x  \right ) = x^{2} -->
-
-Its derivative could be written with a prime `′` symbol:
-
-![prime1](http://latex.codecogs.com/svg.latex?f%27%28x%29%20%3D%202x)
-
-<!-- f'(x) = 2x -->
-
-In code:
-
-```js
-function f (x) {
-  return Math.pow(x, 2)
-}
-
-function fPrime (x) {
-  return 2 * x
-}
-```
-
-Multiple prime symbols can be used to describe the second derivative *ƒ′′* and third derivative *ƒ′′′*. After this, authors typically express higher orders with roman numerals *ƒ*<sup>IV</sup> or superscript numbers *ƒ*<sup>(n)</sup>.
-
-## floor & ceiling
-
-The special brackets `⌊x⌋` and `⌈x⌉` represent the *floor* and *ceil* functions, respectively.
-
-![floor](http://latex.codecogs.com/svg.latex?floor%28x%29%20%3D%20%5Clfloor%20x%20%5Crfloor)
-
-<!-- floor(x) =  \lfloor x \rfloor -->
-
-![ceil](http://latex.codecogs.com/svg.latex?ceil%28x%29%20%3D%20%5Clceil%20x%20%5Crceil)
-
-<!-- ceil(x) =  \lceil x \rceil -->
-
-In code:
-
-```js
-Math.floor(x)
-Math.ceil(x)
-```
-
-When the two symbols are mixed `⌊x⌉`, it typically represents a function that rounds to the nearest integer:
-
-![round](http://latex.codecogs.com/svg.latex?round%28x%29%20%3D%20%5Clfloor%20x%20%5Crceil)
-
-<!-- round(x) =  \lfloor x \rceil -->
-
-In code:
-
-```js
-Math.round(x)
-```
-
-## arrows
-
-Arrows are often used in [function notation](#function-notation). Here are a few other areas you might see them.
-
-#### material implication
-
-Arrows like `⇒` and `→` are sometimes used in logic for *material implication.* That is, if A is true, then B is also true.
-
-![material1](http://latex.codecogs.com/svg.latex?A%20%5CRightarrow%20B)
-
-<!-- A \Rightarrow B -->
-
-Interpreting this as code might look like this:
-
-```js
-if (A === true) {
-  console.assert(B === true)
-}
-```
-
-The arrows can go in either direction `⇐` `⇒`, or both `⇔`. When *A ⇒ B* and *B ⇒ A*, they are said to be equivalent:
-
-![material-equiv](http://latex.codecogs.com/svg.latex?A%20%5CLeftrightarrow%20B)
-
-<!-- A \Leftrightarrow B -->
-
-#### equality
-
-In math, the `<` `>` `≤` and `≥` are typically used in the same way we use them in code: *less than*, *greater than*, *less than or equal to* and *greater than or equal to*, respectively.
-
-```js
-50 > 2 === true
-2 < 10 === true
-3 <= 4 === true
-4 >= 4 === true
-```
-
-On rare occasions you might see a slash through these symbols, to describe *not*. As in, *k* is "not greater than" *j*.
-
-![ngt](http://latex.codecogs.com/svg.latex?k%20%5Cngtr%20j)
-
-<!-- k \ngtr j -->
-
-The `≪` and `≫` are sometimes used to represent *significant* inequality. That is, *k* is an [order of magnitude](https://en.wikipedia.org/wiki/Order_of_magnitude) larger than *j*.
-
-![orderofmag](http://latex.codecogs.com/svg.latex?k%20%5Cgg%20j)
-
-<!-- k \gg j -->
-
-In mathematics, *order of magnitude* is rather specific; it is not just a "really big difference." A simple example of the above:
-
-```js
-orderOfMagnitude(k) > orderOfMagnitude(j)
-```
-
-And below is our `orderOfMagnitude` function, using [Math.trunc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc) (ES6).
-
-```js
-function log10(n) {
-  // logarithm in base 10
-  return Math.log(n) / Math.LN10
-}
-
-function orderOfMagnitude (n) {
-  return Math.trunc(log10(n))
-}
-```
-
-<sup>*Note:* This is not numerically robust.</sup>
-
-See [math-trunc](https://www.npmjs.com/package/math-trunc) for a ponyfill in ES5.
-
-#### conjunction & disjunction
-
-Another use of arrows in logic is conjunction `∧` and disjunction `∨`. They are analogous to a programmer's `AND` and `OR` operators, respectively.
-
-The following shows conjunction `∧`, the logical `AND`.
-
-![and](http://latex.codecogs.com/svg.latex?k%20%3E%202%20%5Cland%20k%20%3C%204%20%5CLeftrightarrow%20k%20%3D%203)
-
-<!-- k > 2 \land k <  4 \Leftrightarrow k = 3   -->
-
-In JavaScript, we use `&&`. Assuming *k* is a natural number, the logic implies that *k* is 3:
-
-```js
-if (k > 2 && k < 4) {
-  console.assert(k === 3)
-}
-```
-
-Since both sides are equivalent `⇔`, it also implies the following:
-
-```js
-if (k === 3) {
-  console.assert(k > 2 && k < 4)
-}
-```
-
-The down arrow `∨` is logical disjunction, like the OR operator.
-
-![logic-or](http://latex.codecogs.com/svg.latex?A%20%5Clor%20B)
-
-<!-- A \lor B -->
-
-In code:
-
-```js
-A || B
-```
-
-## logical negation
-
-Occasionally, the `¬`, `~` and `!` symbols are used to represent logical `NOT`. For example, *¬A* is only true if A is false.
-
-Here is a simple example using the *not* symbol:
-
-![negation](http://latex.codecogs.com/svg.latex?x%20%5Cneq%20y%20%5CLeftrightarrow%20%5Clnot%28x%20%3D%20y%29)
-
-<!-- x \neq y \Leftrightarrow \lnot(x = y) -->
-
-An example of how we might interpret this in code:
-
-```js
-if (x !== y) {
-  console.assert(!(x === y))
-}
-```
-
-*Note:* The tilde `~` has many different meanings depending on context. For example, *row equivalence* (matrix theory) or *same order of magnitude* (discussed in [equality](#equality)).
-
-## intervals
-
-Sometimes a function deals with real numbers restricted to some range of values, such a constraint can be represented using an *interval*
-
-For example we can represent the numbers between zero and one including/not including zero and/or one as:
-
-- Not including zero or one: ![interval-opened-left-opened-right](http://latex.codecogs.com/svg.latex?%280%2C%201%29)
-
-<!-- (0, 1) -->
-
-- Including zero or but not one: ![interval-closed-left-opened-right](http://latex.codecogs.com/svg.latex?%5B0%2C%201%29)
-
-<!-- [0, 1) -->
-
-- Not including zero but including one: ![interval-opened-left-closed-right](http://latex.codecogs.com/svg.latex?%280%2C%201%5D)
-
-<!-- (0, 1] -->
-
-- Including zero and one: ![interval-closed-left-closed-right](http://latex.codecogs.com/svg.latex?%5B0%2C%201%5D)
-
-<!-- [0, 1] -->
-
-For example we to indicate that a point `x` is in the unit cube in 3D we say:
-
-![interval-unit-cube](http://latex.codecogs.com/svg.latex?x%20%5Cin%20%5B0%2C%201%5D%5E3)
-
-<!-- x \in [0, 1]^3 -->
-
-In code we can represent an interval using a two element 1d array:
-
-```js
-var nextafter = require('nextafter')
-
-var a = [nextafter(0, Infinity), nextafter(1, -Infinity)]     // open interval
-var b = [nextafter(0, Infinity), 1]                           // interval closed on the left 
-var c = [0, nextafter(1, -Infinity)]                          // interval closed on the right
-var d = [0, 1]                                                // closed interval
-```
-
-Intervals are used in conjunction with set operations:
-
-- *intersection* e.g. ![interval-intersection](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20%5Ccap%20%5B4%2C%206%5D%20%3D%20%5B4%2C%205%29)
-
-<!-- [3, 5) \cap [4, 6] = [4, 5) -->
-
-- *union* e.g. ![interval-union](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20%5Ccup%20%5B4%2C%206%5D%20%3D%20%5B3%2C%206%5D)
-
-<!-- [3, 5) \cup [4, 6] = [3, 6] -->
-
-- *difference* e.g. ![interval-difference-1](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20-%20%5B4%2C%206%5D%20%3D%20%5B3%2C%204%29) and ![interval-difference-2](http://latex.codecogs.com/svg.latex?%5B4%2C%206%5D%20-%20%5B3%2C%205%29%20%3D%20%5B5%2C%206%5D)
-
-<!-- [3, 5) - [4, 6] = [3, 4) -->
-<!-- [4, 6] - [3, 5)  = [5, 6] -->
-
-In code:
-
-```js
-var Interval = require('interval-arithmetic')
-var nextafter = require('nextafter')
-
-var a = Interval(3, nextafter(5, -Infinity))
-var b = Interval(4, 6)
-
-Interval.intersection(a, b)
-// {lo: 4, hi: 4.999999999999999}
-
-Interval.union(a, b)
-// {lo: 3, hi: 6}
-
-Interval.difference(a, b)
-// {lo: 3, hi: 3.9999999999999996}
-
-Interval.difference(b, a)
-// {lo: 5, hi: 6}
-```
-
-See:
-
-- [next-after](https://github.com/scijs/nextafter) 
-- [interval-arithmetic](https://github.com/maurizzzio/interval-arithmetic)
 
 ## more...
 
