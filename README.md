@@ -1,6 +1,6 @@
 # kod-olarak-matematik-cpp
 
-[Asıl proje: [math-as-code](https://github.com/Jam3/math-as-code)]
+**Not:** Asıl proje, [math-as-code](https://github.com/Jam3/math-as-code)'dur. Asıl projenin geliştiricilerinden mattdesl, "Belgeyi Python'da yeniden yazmak için zamanım veya isteğim yok ama giriş kısmında diğer dil çatallamalarına bağlantı vermekten mutlu olurum." şeklinde [bir açıklama](https://github.com/Jam3/math-as-code/issues/61#issuecomment-422880159) yaptığı için ana depoya değişiklik isteğinin mümkün olmayacağı şimdiki bu yapı tercih edilmiştir.
 
 Bu, geliştiricilere C++ kod karşılıklarını göstererek matematiksel notasyonu anlamalarını kolaylaştırmayı amaçlayan bir referanstır.
 
