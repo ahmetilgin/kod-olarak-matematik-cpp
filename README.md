@@ -606,7 +606,7 @@ Nasıl katkıda bulunacağınıza ilişkin ayrıntılar için, bkz: [CONTRIBUTIN
 
 ## Lisans
 
-MIT, detaylar için bkz: [LICENSE.md](http://github.com/Jam3/math-as-code/blob/master/LICENSE.md).
+MIT, detaylar için bkz: [LICENSE.md](./LICENSE.md).
 
 [1]: http://mimosa-pudica.net/improved-oren-nayar.html#images
 [2]: http://buzzard.ups.edu/courses/2007spring/projects/million-paper.pdf
