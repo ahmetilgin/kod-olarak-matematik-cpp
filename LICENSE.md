@@ -1,7 +1,7 @@
 MIT Lisansı (MIT)
-Copyright (c) 2015 Jam3
 
 Telif Hakkı (c) 2015, 2016, 2017, 2018 Jam3
+
 Telif Hakkı (c) 2018 maidis
 
 Hiçbir ücret talep edilmeden burada işbu yazılımın bir kopyasını ve
