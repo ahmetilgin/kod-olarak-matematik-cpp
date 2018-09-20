@@ -595,6 +595,51 @@ int main()
 }
 ```
 
+## şapka
+
+Geometride, bir karakterin üstündeki "şapka" sembolü, bir [birim vektörünü](https://www.wikiwand.com/tr/Birim_vekt%C3%B6r) temsil etmek için kullanılır. Örneğin, aşağıdaki **a**'nın birim vektörüdür:
+
+![hat](http://latex.codecogs.com/svg.latex?%5Chat%7B%5Cmathbf%7Ba%7D%7D)
+
+<!-- \hat{\mathbf{a}} -->
+
+Kartezyen uzayda, bir birim vektörü tipik olarak 1 uzunluğundadır. Bu, vektörün her bir parçasının -1.0 ila 1.0 aralığında olacağı anlamına gelir. Aşağıda bir 3 boyutlu vektörü bir birim vektörüne *normalize* ediyoruz:
+
+```cpp
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+std::vector<double> normalize(std::vector<double> vec) {
+    double x = vec[0];
+    double y = vec[1];
+    double z = vec[2];
+    double squaredLength = x * x + y * y + z * z;
+
+    if (squaredLength > 0) {
+        double length = sqrt(squaredLength);
+        vec[0] = x / length;
+        vec[1] = y / length;
+        vec[2] = z / length;
+    }
+    return vec;
+}
+
+int main()
+{
+
+    std::vector<double> a = { 0.0, 4.0, -3.0 };
+
+    for(const auto& s: normalize(a))
+        std::cout << s << ' ';
+        //=> [ 0, 0.8, -0.6 ]
+
+    return 0;
+}
+```
+
+Benzer bir gerçekleştirim için [2D and 3D vector normalization and angle calculation in C++](http://snipd.net/2d-and-3d-vector-normalization-and-angle-calculation-in-c) yazısına da bakabilirsiniz.
+
 
 ## daha çok...
 
