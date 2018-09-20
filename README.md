@@ -596,17 +596,17 @@ int main()
 ```
 
 
-## more...
+## daha çok...
 
-Like this guide? Suggest some [more features](https://github.com/Jam3/math-as-code/issues/1) or send us a Pull Request!
+Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/Jam3/math-as-code/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
 
-## Contributing
+## Katkı
 
-For details on how to contribute, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+Nasıl katkıda bulunacağınıza ilişkin ayrıntılar için, bkz: [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## License
+## Lisans
 
-MIT, see [LICENSE.md](http://github.com/Jam3/math-as-code/blob/master/LICENSE.md) for details.
+MIT, detaylar için bkz: [LICENSE.md](http://github.com/Jam3/math-as-code/blob/master/LICENSE.md).
 
 [1]: http://mimosa-pudica.net/improved-oren-nayar.html#images
 [2]: http://buzzard.ups.edu/courses/2007spring/projects/million-paper.pdf
