@@ -843,6 +843,164 @@ int main()
 Karmaşık bir sayı, 2B düzlemde bir koordinat olarak görülen gerçek ve sanal bir sayının birleşimidir. Daha çok bilgi için [A Visual, Intuitive Guide to Imaginary Numbers (Sanal Sayılar için Görsel, Sezgisel Bir Kılavuz)](http://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/)'a bakabilirsiniz.
 
 
+## fonksiyon
+
+[Fonksiyonlar](https://www.wikiwand.com/tr/Fonksiyon) matematiğin temel özellikleridir ve fonksiyon kavramını koda çevirmek epey kolaydır.
+
+Bir fonksiyon, bir giriş bir çıkış değeriyle ilişkilendirir. Örneğin, aşağıdaki bir fonksiyondur:
+
+![function1](http://latex.codecogs.com/svg.latex?x%5E%7B2%7D)
+
+<!-- x^{2} -->
+
+Bu fonksiyona bir *isim* verebiliriz. Yaygın olarak, bir fonksiyonu tanımlamak için `ƒ` kullanırız, fakat `A(x)` veya başka bir şey de olabilir.
+
+![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
+
+<!-- f\left (x  \right ) = x^{2} -->
+
+Kodda `kare` olarak isimlendirip şöyle yazabiliriz:
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+double kare (double x) {
+    return std::pow(x, 2);
+}
+
+int main()
+{
+
+    double sayi = 4.0;
+    std::cout << sayi << " sayısının karesi " << kare(sayi) << " olur.\n";
+
+    return 0;
+}
+```
+
+Bazen bir fonksiyon adlandırılmaz ve bunun yerine çıktı yazılır.
+
+![function3](http://latex.codecogs.com/svg.latex?y%20%3D%20x%5E%7B2%7D)
+
+<!-- y = x^{2} -->
+
+Yukarıdaki örnekte, *x* giriş, *kare alma* ilişki ve *y* çıkıştır.
+
+Fonksiyonlar, bir programlama dilinde olduğu gibi birden çok parametreye de sahip olabilir. Bunlar matematikte *argümanlar* olarak bilinir ve bir fonksiyonun aldığı argümanların sayısı fonksiyonun *ilişki derecesi* (iki nesne arasındaki ilişki sayısı) olarak bilinir.
+
+![function4](http://latex.codecogs.com/svg.latex?f%28x%2Cy%29%20%3D%20%5Csqrt%7Bx%5E2%20&plus;%20y%5E2%7D)
+
+<!-- f(x,y) = \sqrt{x^2 + y^2} -->
+
+Kodda:
+
+```cpp
+double uzunluk (double x, double y) {
+  return std::sqrt(x * x + y * y);
+}
+```
+
+### parçalı fonksiyon
+
+Bazı fonksiyonlar *x* giriş değerine bağlı olarak farklı ilişkiler kullanacaktır.
+
+Aşağıdaki *ƒ* fonksiyonu giriş değerine bağlı olarak iki "alt fonksiyon" arasında seçim yapar.
+
+![piecewise1](http://latex.codecogs.com/svg.latex?f%28x%29%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7Bx%5E2-x%7D%7Bx%7D%2C%26%20%5Ctext%7Bif%20%7D%20x%5Cgeq%201%5C%5C%200%2C%20%26%20%5Ctext%7Botherwise%7D%20%5Cend%7Bcases%7D)
+
+<!--    f(x)= 
+\begin{cases}
+    \frac{x^2-x}{x},& \text{if } x\geq 1\\
+    0, & \text{otherwise}
+\end{cases} -->
+
+Bu, koddaki `if` / `else` yapısına çok benzer. Sağ taraftaki koşullar genellikle **"for x < 0"** veya **"if x = 0"** olarak yazılır. Durum doğruysa, soldaki işlev kullanılır.
+
+Parçalı fonksiyonlarda, **"aksi halde"** ve **"başka durumlarda"** ifadeleri, koddaki `else` ifadesine benzer.
+
+```cpp
+double f (double x) {
+    if (x >= 1) {
+        return ((std::pow(x, 2) - x) / x);
+    } else {
+        return 0;
+    }
+}
+```
+
+### yaygın fonksiyonlar
+
+Matematikte her yerde bulunan bazı fonksiyon isimleri vardır. Bir programcı için, bunlar dilde bulunan "yerleşik" fonksiyonlara benzer olabilir.
+
+Böyle bir örnek *sgn* fonksiyonudur. Bu, [işaret fonksiyonu](https://www.wikiwand.com/tr/%C4%B0%C5%9Faret_fonksiyonu) veya diğer adıyla *signum* fonksiyonudur. Bunu tanımlamak için parçalı fonksiyon notasyonunu kullanalım:
+
+![sgn](http://latex.codecogs.com/svg.latex?sgn%28x%29%20%3A%3D%20%5Cbegin%7Bcases%7D%20-1%26%20%5Ctext%7Bif%20%7D%20x%20%3C%200%5C%5C%200%2C%20%26%20%5Ctext%7Bif%20%7D%20%7Bx%20%3D%200%7D%5C%5C%201%2C%20%26%20%5Ctext%7Bif%20%7D%20x%20%3E%200%5C%5C%20%5Cend%7Bcases%7D)
+
+<!-- sgn(x) := 
+\begin{cases}
+    -1& \text{if } x < 0\\
+    0, & \text{if } {x = 0}\\
+    1, & \text{if } x > 0\\
+\end{cases} -->
+
+Kodda şöyle görünebilir:
+
+```cpp
+short sgn (double x) {
+    if (x < 0) return -1;
+    if (x > 0) return 1;
+    return 0;
+}
+```
+
+veya:
+
+```cpp
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+```
+
+[Armadillo](http://arma.sourceforge.net/docs.html#misc_fns), [Boost](https://www.boost.org/doc/libs/1_47_0/libs/math/doc/sf_and_dist/html/math_toolkit/utils/sign_functions.html) gibi çeşitli kütüphaneler aracılığıyla da işaret fonksiyonunu kullanabilirsiniz.
+
+### fonksiyon notasyonu
+
+Literatürde, bazen fonksiyonlar daha açık notasyon ile tanımlanabilir. Örneğin, daha önce bahsettiğimiz `kare` fonksiyona geri dönelim:
+
+![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
+
+<!-- f\left (x  \right ) = x^{2} -->
+
+Bu, aşağıdaki biçimde de yazılabilir:
+
+![mapsto](http://latex.codecogs.com/svg.latex?f%20%3A%20x%20%5Cmapsto%20x%5E2)
+
+<!-- f : x \mapsto x^2 -->
+
+Burada bir kuyruğu olan ok, *x, x<sup>2</sup> ile eşleşir* örneğinde olduğu gibi "eşleşir" anlamına gelir.
+
+Bazen, belli olmadığı zaman, notasyon aynı zamanda fonksiyonun *tanım kümesini* ve *değer kümesini* de tanımlayacaktır. *ƒ* fonksiyonunun daha resmi bir tanımı şu şekilde yazılabilir:
+
+![funcnot](http://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20f%20%3A%26%5Cmathbb%7BR%7D%20%5Crightarrow%20%5Cmathbb%7BR%7D%5C%5C%20%26x%20%5Cmapsto%20x%5E2%20%5Cend%7Balign*%7D)
+
+<!-- \begin{align*}
+f :&\mathbb{R} \rightarrow \mathbb{R}\\
+&x \mapsto x^2 
+\end{align*}
+ -->
+
+Bir fonksiyonun *tanım kümesini* ve *değer kümesini*, sırasıyla *giriş* ve *çıkış* türleri gibidir. İşte, bir tamsayı çıkaran ve önceki *sgn* fonksiyonumuzu kullanan başka bir örnek:
+
+![domain2](http://latex.codecogs.com/svg.latex?sgn%20%3A%20%5Cmathbb%7BR%7D%20%5Crightarrow%20%5Cmathbb%7BZ%7D)
+
+<!-- sgn : \mathbb{R} \rightarrow \mathbb{Z} -->
+
+Buradaki (kuyruğu olmayan) ok bir *kümeyi* bir başka kümeye eşlemek için kullanılır.
+
+JavaScript'te ve dinamik olarak yazılan diğer dillerde, bir fonksiyonun giriş/çıkışını açıklamak ve doğrulamak için belgelendirme ve/veya çalışma zamanı kontrolleri kullanabilirsiniz. Flowtype gibi bazı araçlar, JavaScript'e statik yazımı getirmeye çalışır. Java ve C++ gibi diğer diller, bir fonksiyonun giriş/çıkışının statik türlerine bağlı olarak gerçek fonksiyon aşırı yüklemesine izin verir. Bu, matematiğe daha yakındır: farklı bir tanım kümesi kullanıyorlarsa, iki fonksiyon aynı değildir.
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
