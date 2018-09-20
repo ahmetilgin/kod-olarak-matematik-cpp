@@ -641,6 +641,94 @@ int main()
 Benzer bir gerçekleştirim için [2D and 3D vector normalization and angle calculation in C++](http://snipd.net/2d-and-3d-vector-normalization-and-angle-calculation-in-c) yazısına da bakabilirsiniz.
 
 
+## eleman
+
+Küme teorisinde, bir şeyin bir kümenin elemanı olup olmadığını tanımlamak için "elemanıdır" sembolü `∈` ve `∋` kullanılabilir. Örneğin:
+
+![element1](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%203%20%5Cin%20A)
+
+<!-- A=\left \{3,9,14}{  \right \}, 3 \in A -->
+
+Burada `{3, 9, 14}` değerlerinden oluşan bir *A* sayı kümesi var ve diyoruz ki `3`, bu kümenin bir "elemanıdır".
+
+C++'ta basit bir uygulama şöyle olabilir:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int main()
+{
+    int n1 = 8;
+    int n2 = 9;
+
+    std::vector<int> vektor = { 3, 9, 14 };
+
+    auto result1 = std::find(std::begin(vektor), std::end(vektor), n1);
+    auto result2 = std::find(std::begin(vektor), std::end(vektor), n2);
+
+    if (result1 != std::end(vektor)) {
+        std::cout << "vektor'de var: " << n1 << '\n';
+    } else {
+        std::cout << "vektor'de yok: " << n1 << '\n';
+    }
+
+    if (result2 != std::end(vektor)) {
+        std::cout << "vektor'de var:: " << n2 << '\n';
+    } else {
+        std::cout << "vektor'de yok: " << n2 << '\n';
+    }
+
+    return 0;
+}
+```
+
+Bununla birlikte, sadece benzersiz değerleri tutan bir `std::set` kullanmak daha doğru olacaktır:
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <set>
+
+int main()
+{
+    int n1 = 8;
+    int n2 = 9;
+
+    std::set<int> sayiKumesi = { 3, 9, 14 };
+
+    // if(sayiKumesi.contains(n1)) { // C++20'de gelecek
+    if(sayiKumesi.count(n1) > 0) {
+        std::cout << n1 << " var\n";
+    } else {
+        std::cout << n1 << " yok\n";
+    }
+
+    // if(sayiKumesi.contains(n2)) { // C++20'de gelecek
+    if(sayiKumesi.count(n2) > 0) {
+        std::cout << n2 << " var\n";
+    } else {
+        std::cout << n2 << " yok\n";
+    }
+
+    return 0;
+}
+```
+
+Geriye doğru olan `∋` de aynıdır, ancak sıra değişir:
+
+![element2](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%20A%20%5Cni%203)
+
+<!-- A=\left \{3,9,14}{  \right \}, A \ni 3 -->
+
+Ayrıca `∉` ve `∌` gibi "bir elemanı değildir" sembollerini de kullanabilirsiniz:
+
+![element3](http://latex.codecogs.com/svg.latex?A%3D%5Cleft%20%5C%7B3%2C9%2C14%7D%7B%20%5Cright%20%5C%7D%2C%206%20%5Cnotin%20A)
+
+<!-- A=\left \{3,9,14}{  \right \}, 6 \notin A -->
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
