@@ -1003,7 +1003,7 @@ JavaScript'te ve dinamik olarak yazılan diğer dillerde, bir fonksiyonun giriş
 
 ## birincil
 
-Birincil işareti (`′`) genellikle, değişken isimlerinde, farklı bir isim vermeden benzer olan şeyleri tanımlamak için kullanılır. Bazı dönüşümlerden sonra "sonraki değeri" tanımlayabilir.
+[Birincil işareti](https://www.wikiwand.com/en/Prime_(symbol)) (`′`) genellikle, değişken isimlerinde, farklı bir isim vermeden benzer olan şeyleri tanımlamak için kullanılır. Bazı dönüşümlerden sonra "sonraki değeri" tanımlayabilir.
 
 Örneğin, bir 2B noktayı *(x, y)* alıp döndürürsek sonucu *(x′, y′)* olarak adlandırabilirsiniz. Veya **M** matrisinin *transpozesi* **M′** olarak adlandırılabilir.
 
