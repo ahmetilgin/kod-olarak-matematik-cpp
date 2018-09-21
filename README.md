@@ -1001,6 +1001,41 @@ Buradaki (kuyruğu olmayan) ok bir *kümeyi* bir başka kümeye eşlemek için k
 JavaScript'te ve dinamik olarak yazılan diğer dillerde, bir fonksiyonun giriş/çıkışını açıklamak ve doğrulamak için belgelendirme ve/veya çalışma zamanı kontrolleri kullanabilirsiniz. Flowtype gibi bazı araçlar, JavaScript'e statik yazımı getirmeye çalışır. Java ve C++ gibi diğer diller, bir fonksiyonun giriş/çıkışının statik türlerine bağlı olarak gerçek fonksiyon aşırı yüklemesine izin verir. Bu, matematiğe daha yakındır: farklı bir tanım kümesi kullanıyorlarsa, iki fonksiyon aynı değildir.
 
 
+## birincil
+
+Birincil işareti (`′`) genellikle, değişken isimlerinde, farklı bir isim vermeden benzer olan şeyleri tanımlamak için kullanılır. Bazı dönüşümlerden sonra "sonraki değeri" tanımlayabilir.
+
+Örneğin, bir 2B noktayı *(x, y)* alıp döndürürsek sonucu *(x′, y′)* olarak adlandırabilirsiniz. Veya **M** matrisinin *transpozesi* **M′** olarak adlandırılabilir.
+
+Kodda, genellikle değişkene, `donusturulmusPozisyon` gibi daha açıklayıcı bir ad atarız.
+
+Bir matematiksel fonksiyon için, birincil işareti genellikle bu fonksiyonun *türevini* tanımlar. Türevler ilerideki bir bölümde açıklanacaktır. Daha önceki bir fonksiyonumuzu ele alalım:
+
+![function2](http://latex.codecogs.com/svg.latex?f%5Cleft%20%28x%20%5Cright%20%29%20%3D%20x%5E%7B2%7D)
+
+<!-- f\left (x  \right ) = x^{2} -->
+
+Bunun türevi bir birincil `′` işaretiyle yazılabilir:
+
+![prime1](http://latex.codecogs.com/svg.latex?f%27%28x%29%20%3D%202x)
+
+<!-- f'(x) = 2x -->
+
+Kodda:
+
+```cpp
+template <typename T> T f (T x) {
+  return pow(x, 2);
+}
+
+template <typename T> T fPrime (T x) {
+  return (2 * x);
+}
+```
+
+İkinci türevi *ƒ′′* ve üçüncü türevi *ƒ′′′* tanımlamak için birden çok birincil işareti kullanılabilir. Bundan sonrakiler için yazarlar genellikle Roma rakamlarını *ƒ*<sup>IV</sup> veya üst simge sayılarını *ƒ*<sup>(n)</sup> kullanır.
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
