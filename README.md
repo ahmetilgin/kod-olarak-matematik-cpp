@@ -1036,6 +1036,38 @@ template <typename T> T fPrime (T x) {
 İkinci türevi *ƒ′′* ve üçüncü türevi *ƒ′′′* tanımlamak için birden çok birincil işareti kullanılabilir. Bundan sonrakiler için yazarlar genellikle Roma rakamlarını *ƒ*<sup>IV</sup> veya üst simge sayılarını *ƒ*<sup>(n)</sup> kullanır.
 
 
+## taban ve tavan
+
+Özel parantezler `⌊x⌋` ve `⌈x⌉`, sırasıyla *taban* ve *tavan* fonksiyonlarını temsil eder.
+
+![floor](http://latex.codecogs.com/svg.latex?floor%28x%29%20%3D%20%5Clfloor%20x%20%5Crfloor)
+
+<!-- floor(x) =  \lfloor x \rfloor -->
+
+![ceil](http://latex.codecogs.com/svg.latex?ceil%28x%29%20%3D%20%5Clceil%20x%20%5Crceil)
+
+<!-- ceil(x) =  \lceil x \rceil -->
+
+Kodda:
+
+```cpp
+    std::cout << std::ceil(2.4) << '\n'; // 3
+    std::cout << std::floor(2.4) << '\n'; // 2
+```
+
+İki sembol `⌊x⌉` şeklinde birleştirildiğinde, tipik olarak en yakın tam sayıya yuvarlayan bir fonksiyonu temsil eder:
+
+![round](http://latex.codecogs.com/svg.latex?round%28x%29%20%3D%20%5Clfloor%20x%20%5Crceil)
+
+<!-- round(x) =  \lfloor x \rceil -->
+
+Kodda:
+
+```cpp
+    std::cout << std::round(2.4) << '\n'; // 2
+```
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
