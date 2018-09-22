@@ -1068,6 +1068,140 @@ Kodda:
 ```
 
 
+## oklar
+
+Oklar genellikle fonksiyon notasyonunda kullanılır. Aşağıda görebileceğiniz birkaç farklı alan listelenmiştir.
+
+#### maddi gerektirme
+Mantıkta bazen `⇒` ve `→` gibi oklar, *maddi gerektirme* için kullanılır. Yani, A doğruysa, B de doğrudur.
+
+![material1](http://latex.codecogs.com/svg.latex?A%20%5CRightarrow%20B)
+
+<!-- A \Rightarrow B -->
+
+Bunun kod olarak yorumu şöyle olabilir:
+
+```cpp
+    bool A = true;
+    bool B;
+    if (A == true) {
+        B = true;
+    }
+    std::cout << "B: " << B << '\n'; // 1
+```
+
+Oklar iki yöne doğru da olabilir `⇐` `⇒` veya iki yönlü de olabilir `⇔`. *A ⇒ B* ve *B ⇒ A* olduğunda aşağıdakine eşdeğer oldukları söylenir:
+
+![material-equiv](http://latex.codecogs.com/svg.latex?A%20%5CLeftrightarrow%20B)
+
+<!-- A \Leftrightarrow B -->
+
+#### eşitlik
+
+Matematikte, `<` `>` `≤` ve `≥`, genellikle bunları kodda kullandığımız şekilde kullanılır, sırasıyla: *daha küçük*, *daha büyük*, *daha küçük veya eşit* veya *daha büyük veya eşit*.
+
+```cpp
+    50 > 2 == true;
+    2 < 10 == true;
+    5 <= 4 == false;
+    4 >= 4 == true;
+```
+
+Pek sık olmasa da, bu semboller üzerinde *olumsuzluk* anlamı katan bir eğik çizgi görebilirsiniz. Örneğin *k*, "büyük değildir" *j*'den demek için:
+
+![ngt](http://latex.codecogs.com/svg.latex?k%20%5Cngtr%20j)
+
+<!-- k \ngtr j -->
+
+`≪` ve `≫` bazen kaydadeğer bir eşitsizliği temsil etmek için kullanılır. Yani, k'nın, j'den [büyüklük kertesi](https://en.wikipedia.org/wiki/Order_of_magnitude) (basamaksal büyüklük) olarak daha büyük olduğunu ifade eder.
+
+![orderofmag](http://latex.codecogs.com/svg.latex?k%20%5Cgg%20j)
+
+<!-- k \gg j -->
+
+Matematikte, *basamaksal büyüklük* epey spesifiktir; sadece "büyük bir fark" anlamı taşımaz. Yukarıdakilerin basit bir örneği:
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+double orderOfMagnitude (double n) {
+  return std::abs(std::floor(std::log10(std::abs(n))));
+}
+
+int main()
+{
+    double a = 3e-4;
+    double b = 2e3;
+    if (orderOfMagnitude(a) > orderOfMagnitude(b))
+        std::cout << "a'nın basamaksal büyüklüğü (" << orderOfMagnitude(a)
+                  <<  "), b'ninkinden (" << orderOfMagnitude(b) << ") büyük.\n";
+    else if (orderOfMagnitude(a) < orderOfMagnitude(b))
+        std::cout << "a'nın basamaksal büyüklüğü (" << orderOfMagnitude(a)
+                  <<  "), b'ninkinden (" << orderOfMagnitude(b) << ") küçük.\n";
+    else
+        std::cout << "a'nın basamaksal büyüklüğü b'ninkine eşit: "
+                  << orderOfMagnitude(a) << '\n';
+
+    return 0;
+}
+```
+
+#### birleşim ve ayrışım
+
+Okların mantıktaki başka bir kullanımı, birleşim `∧` ve ayrışımdır `∨`. Bunlar sırasıyla programlamadaki `AND` ve `OR` operatörlerine benzemektedir.
+
+Aşağıdaki birleşimi `∧`, mantıksal `AND`'i gösterir:
+
+![and](http://latex.codecogs.com/svg.latex?k%20%3E%202%20%5Cland%20k%20%3C%204%20%5CLeftrightarrow%20k%20%3D%203)
+
+<!-- k > 2 \land k <  4 \Leftrightarrow k = 3   -->
+
+C++’ta &&’i kullanırız. Aşağıdaki örnekte *k*'nin doğal bir sayı olduğu varsayıldığında, mantık *k*'nin 3 olup olmadığını kontrol eder:
+
+```cpp
+    int k = 3;
+    if (k > 2 && k < 4) {
+        std::cout << "k'nın değeri 3'tür: " << k << '\n';
+    }
+```
+
+Aşağı ok `∨`, OR operatörü gibi mantıksal bir ayrışımdır.
+
+![logic-or](http://latex.codecogs.com/svg.latex?A%20%5Clor%20B)
+
+<!-- A \lor B -->
+
+Kodda:
+
+```cpp
+A || B
+```
+
+
+## mantıksal olumsuzluk
+
+Bazen `¬`, `~` ve `!` sembolleri, mantıksal `NOT`'ı temsil etmek için kullanılır. Örneğin, *¬A*, sadece A yanlışsa doğrudur.
+
+*not* sembolünün kullanımına basit bir örnek:
+
+![negation](http://latex.codecogs.com/svg.latex?x%20%5Cneq%20y%20%5CLeftrightarrow%20%5Clnot%28x%20%3D%20y%29)
+
+<!-- x \neq y \Leftrightarrow \lnot(x = y) -->
+
+Bunu kodda nasıl yorumlayabileceğimizin bir örneği de:
+
+```cpp
+    int x = 1;
+    int y = 2;
+    if (x != y) {
+        std::cout << "x, y'ye eşit değildir.\n";
+    }
+```
+
+*Not:* Tilde `~`, içeriğe bağlı olarak birçok farklı anlama sahiptir. Örneğin, satır eşdeğerliği (matris teorisinde) veya aynı basamaksal büyüklük derecesi (eşitlik bölümünde ele alınmıştır) anlamlarına gelebilir.
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
