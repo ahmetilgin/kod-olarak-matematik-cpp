@@ -2,7 +2,7 @@
 
 ### Sorunlar
 
-Matematiksel ifadelerde hatalar, anlatım veya dilde problemler ya da bir sembol veya denklemin koda çevrilmesiyle ilgili halledilmesi gereken durumlar görürseniz lütfen bir hata kaydı oluşturun.
+Matematiksel ifadelerde hatalar, anlatım veya dilde problemler ya da bir sembol veya denklemin koda çevrilmesiyle ilgili halledilmesi gereken durumlar görürseniz lütfen [bir hata kaydı](https://github.com/maidis/kod-olarak-matematik-cpp/issues/new) oluşturun.
 
 Lütfen yeni bir tane oluşturmadan önce [mevcut kayıtları](https://github.com/maidis/kod-olarak-matematik-cpp/issues) arayın.
 
@@ -13,10 +13,10 @@ Değişiklik istekleri göndermeniz harika olur! :tada: Yeni bir özellik ekleye
 Diğer bazı yönergeler:
 
 - Değişiklik isteklerinizi temiz tutun ve yalnızca eklemek istediğiniz özellikle ilgili olan parçaları değiştirin. Farklı özellikler veya düzeltmeler için en iyisi bağımsız değişiklik istekleri olarak sunulmasıdır.
-- Bazı unicode sembolleri satır içi olarak kullanılabilir, ancak genel olarak bunun amacı, literatürde yaygın olarak bulunan denklemleri açığa çıkarmaktır. Lütfen LaTeX SVG'leri kullanın.
-- Şu anda denklemler bu [LaTeX düzenleyicisi](http://www.codecogs.com/latex/eqneditor.php) kullanılarak oluşturuluyor, dosya biçimi olarak SVG seçiliyor ve ortaya çıkan bağlantılar doğrudan görüntülere bağlanıyor.
+- Bazı unicode semboller satır içi olarak kullanılabilir, ancak genel olarak bunun amacı, literatürde yaygın olarak bulunan denklemleri açığa çıkarmaktır. Lütfen LaTeX SVG'leri kullanın.
+- Şu anda denklemler [bu LaTeX düzenleyicisi](http://www.codecogs.com/latex/eqneditor.php) kullanılarak oluşturuluyor, dosya biçimi olarak SVG seçiliyor ve ortaya çıkan bağlantılar doğrudan görüntülere bağlanıyor.
 - Ayrıca, resmin hemen altına bir Markdown yorumu olarak ham LaTeX'i de ekleyin. Yorum biçimi olarak şunu kullanın: `<!-- comment -->`
-- Kod `cpp` ile vurgulanan sözdiziminde olmalı ve bu [biçim kılavuzunu](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) takip etmelidir.
+- Kod `cpp` ile vurgulanan sözdiziminde olmalı ve [bu biçim kılavuzunu](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) takip etmelidir.
 - Lütfen yeni değişikliklerde genel yazı biçimini korumaya çalışın.
 
 #### LaTeX Örneği
