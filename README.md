@@ -1202,6 +1202,87 @@ Bunu kodda nasıl yorumlayabileceğimizin bir örneği de:
 *Not:* Tilde `~`, içeriğe bağlı olarak birçok farklı anlama sahiptir. Örneğin, satır eşdeğerliği (matris teorisinde) veya aynı basamaksal büyüklük derecesi (eşitlik bölümünde ele alınmıştır) anlamlarına gelebilir.
 
 
+## aralıklar
+
+Bazen bir fonksiyon, bir dizi değerle sınırlı gerçel sayılarla ilgilenir, böyle bir kısıtlama, bir *aralık* kullanılarak temsil edilebilir.
+
+Örneğin sıfır ve bir arasındaki sayıları, sıfır veya biri dahil ederek veya etmeyerek aşağıdaki gibi temsil edebiliriz:
+
+- Sıfır ve bir dahil değil: ![interval-opened-left-opened-right](http://latex.codecogs.com/svg.latex?%280%2C%201%29)
+
+<!-- (0, 1) -->
+
+- Sıfır dahil ama bir dahil değil: ![interval-closed-left-opened-right](http://latex.codecogs.com/svg.latex?%5B0%2C%201%29)
+
+<!-- [0, 1) -->
+
+- Sıfır dahil değil ama bir dahil: ![interval-opened-left-closed-right](http://latex.codecogs.com/svg.latex?%280%2C%201%5D)
+
+<!-- (0, 1] -->
+
+- Sıfır ve bir dahil: ![interval-closed-left-closed-right](http://latex.codecogs.com/svg.latex?%5B0%2C%201%5D)
+
+<!-- [0, 1] -->
+
+Örneğin, birim küp içinde bir `x` noktasını gösterdiğimizi belirtmek istersek:
+
+![interval-unit-cube](http://latex.codecogs.com/svg.latex?x%20%5Cin%20%5B0%2C%201%5D%5E3)
+
+<!-- x \in [0, 1]^3 -->
+
+C++'ta aralıklar üzerinde çalışmak için [Boost.Icl](https://www.boost.org/doc/libs/1_64_0/libs/icl/doc/html/index.html), [libieeep1788](https://github.com/nehmeier/libieeep1788) ve [Moore](https://www.ime.usp.br/~walterfm/moore/moore.html) kullanılabilir.
+
+Kodda iki elemanlı 1b dizi kullanarak bir aralığı şu şekilde temsil edebiliriz:
+
+```cpp
+TODO: cpp'ye çevrilecek
+var nextafter = require('nextafter')
+
+var a = [nextafter(0, Infinity), nextafter(1, -Infinity)]     // open interval
+var b = [nextafter(0, Infinity), 1]                           // interval closed on the left 
+var c = [0, nextafter(1, -Infinity)]                          // interval closed on the right
+var d = [0, 1]                                                // closed interval
+```
+
+Aralıklar küme işlemleriyle birlikte kullanılır:
+
+- *kesişim*, örneğin: ![interval-intersection](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20%5Ccap%20%5B4%2C%206%5D%20%3D%20%5B4%2C%205%29)
+
+<!-- [3, 5) \cap [4, 6] = [4, 5) -->
+
+- *birleşim*, örneğin: ![interval-union](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20%5Ccup%20%5B4%2C%206%5D%20%3D%20%5B3%2C%206%5D)
+
+<!-- [3, 5) \cup [4, 6] = [3, 6] -->
+
+- *fark*, örneğin: ![interval-difference-1](http://latex.codecogs.com/svg.latex?%5B3%2C%205%29%20-%20%5B4%2C%206%5D%20%3D%20%5B3%2C%204%29) ve ![interval-difference-2](http://latex.codecogs.com/svg.latex?%5B4%2C%206%5D%20-%20%5B3%2C%205%29%20%3D%20%5B5%2C%206%5D)
+
+<!-- [3, 5) - [4, 6] = [3, 4) -->
+<!-- [4, 6] - [3, 5)  = [5, 6] -->
+
+Kodda:
+
+```cpp
+TODO: cpp'ye çevrilecek
+var Interval = require('interval-arithmetic')
+var nextafter = require('nextafter')
+
+var a = Interval(3, nextafter(5, -Infinity))
+var b = Interval(4, 6)
+
+Interval.intersection(a, b)
+// {lo: 4, hi: 4.999999999999999}
+
+Interval.union(a, b)
+// {lo: 3, hi: 6}
+
+Interval.difference(a, b)
+// {lo: 3, hi: 3.9999999999999996}
+
+Interval.difference(b, a)
+// {lo: 5, hi: 6}
+```
+
+
 ## daha çok...
 
 Bu rehberi sevdiniz mi? Daha iyi hale getirmek için [değişiklik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/pulls) veya [özellik isteğinde](https://github.com/maidis/kod-olarak-matematik-cpp/issues) bulunmaya ne dersiniz!
